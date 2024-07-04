@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <h1>Kitap Güncelle</h1>
-        <form id="updateForm">
+        <form id="updateBookForm">
             <input type="hidden" id="updateId" name="id">
             <div class="form-group">
                 <label for="updateTitle">Kitap Adı</label>
@@ -29,6 +29,60 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="/static/app.js"></script>
+    <script>
+        $(document).ready(function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const bookId = urlParams.get('bookId');
+
+        if (bookId) {
+                $.ajax({
+                    url: '/getBook',
+                    type: 'GET',
+                    data: { id: bookId },
+                    success: function(data) {
+                        $('#updateId').val(data.id);
+                        $('#updateTitle').val(data.name);
+                        $('#updateAuthor').val(data.author);
+                        $('#updatePublicationYear').val(data.publication_year);
+                    },
+                    error: function(error) {
+                        console.log('Kitap bilgileri alınamadı', error);
+                    }
+                });
+            }
+
+            $('#updateBookForm').submit(function(e) {
+            e.preventDefault();
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const bookId = urlParams.get('bookId');
+            
+            if (!bookId) {
+                console.error('Kitap ID bulunamadı');
+                return;
+            }
+
+            const formData = {
+                name: $('#updateTitle').val(),
+                author: $('#updateAuthor').val(),
+                publication_year: parseInt($('#updatePublicationYear').val())
+            };
+
+            $.ajax({
+                url: '/books/' + bookId,
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function(response) {
+                    console.log('Kitap güncellendi:', response);
+                    window.location.href = "/viewLibrary";
+                },
+                error: function(error) {
+                    console.log('Güncelleme hatası:', error);
+                }
+            });
+        });
+        });
+    </script>
 </body>
 </html>

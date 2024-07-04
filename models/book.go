@@ -19,7 +19,7 @@ type Book struct {
 func Init() {
 	var err error
 
-	dsn := "your_database_connection_name:password@tcp(localhost:3306)/your_database_name?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:password@tcp(localhost:3306)/your_database_name?charset=utf8mb4&parseTime=True&loc=Local"
 	Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")

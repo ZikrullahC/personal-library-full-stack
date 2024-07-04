@@ -22,15 +22,16 @@ func main() {
 	// CRUD işlemleri için API yolları
 	router.POST("/books", controllers.CreateBook)
 	router.GET("/books", controllers.GetBooks)
-	router.GET("/books/:id", controllers.GetBooks)
+	router.GET("/books/:id", controllers.GetBook)
 	router.PUT("/books/:id", controllers.UpdateBook)
 	router.DELETE("/books/:id", controllers.DeleteBook)
+
+	router.GET("/getBook", controllers.GetBook)
 
 	// HTML dosyalarını sunma
 	router.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", nil)
 	})
-
 	router.GET("/addBook", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "addBook.html", nil)
 	})
@@ -40,9 +41,6 @@ func main() {
 	router.GET("/updateBook", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "updateBook.html", nil)
 	})
-	// router.DELETE("/deleteBook", func(c *gin.Context) {
-	// 	c.HTML(http.StatusOK, "deleteBook.html", nil)
-	// })
 
 	router.Run(":8080")
 }
